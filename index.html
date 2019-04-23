@@ -33,15 +33,13 @@
        
     </div>
     <div class="container"> 
-            <ul id="list" class="list has-text-centered">
+            <ul id="list" class="list has-text-centered is-large">
                       
             </ul>
+            <p id = "listpara" class="has-text-centered">find your domain</p>
         </div>
 
-        <!-- <p class="level-item has-text-centered">
-                <img src="https://bulma.io/images/bulma-type.png" alt="" style="height: 30px;">
-              </p> -->
-
+      
 
     <script>
             document.addEventListener('keypress',(event)=>{
@@ -55,35 +53,44 @@
        async function getData() {
             
         let data = document.getElementById('data').value
-          let ulist = document.getElementById('list')
+        document.getElementById('listpara').innerHTML=" <p id = 'listpara' class='has-text-centered'>find your domain</p>"  
+        let ulist = document.getElementById('list')
            ulist.innerHTML = " "
-          await fetch(`https://rtb.namecheapapi.com/api/search/${data}?session_id=4426258624`)
+           let sumall =0;
+           let sumavailable=0;
+           let sumvip = 0;
+           await fetch(`https://rtb.namecheapapi.com/api/search/${data}?session_id=4426258624`)
                 .then((response)=>response.json())
                     .then((data)=>{
                  data.ranks.forEach(data=>{
-              if(data.status.available)
-               { console.log(data.domain)
+              
+                  sumall+=1;
+
+                    if(data.status.available)
+               {   sumavailable+=1;
                 var li = document.createElement("li");
                 var br = document.createElement("br")
                 li.appendChild(document.createTextNode(data.domain))
                 li.classList.add("list-item");
-                // li.classList.add("level-item")
+               
                 
                 if(data.status.premium)
-                        { 
+                        { sumvip+=1; 
                             li.classList.add("is-active");
                         }
                         
                        
                 
                         ulist.appendChild(li);
-                        // ulist.value+='<br><br><br>' 
-                         
+                       
             }
 
           })      
       })            
-        }
+        
+       document.getElementById('listpara').innerHTML = `Found ${sumall} domains from which ${sumavailable} are available and ${sumvip} are premium ones`
+       
+    }
 
     </script>
 </body>
